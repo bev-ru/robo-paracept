@@ -1,5 +1,5 @@
 {
-    "name": "codeception/robo-paracept",
+    "name": "bev-ru/robo-paracept",
     "description": "Codeception Parallel Execution Tasks via Robo Task Runner",
     "license": "MIT",
     "authors": [
