@@ -119,8 +119,7 @@ class SplitTestFilesByGroupsTask extends TestsSplitter implements TaskInterface
             ->name("*Cept.php")
             ->name("*Cest.php")
             ->name("*Test.php")
-            ->path($this->testsFrom)
-            ->in($this->projectRoot ? $this->projectRoot : getcwd());
+            ->in($this->projectRoot . DIRECTORY_SEPARATOR . $this->testsFrom);
 
         $i = 0;
         $groups = [];
@@ -129,7 +128,10 @@ class SplitTestFilesByGroupsTask extends TestsSplitter implements TaskInterface
         // splitting tests by groups
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
-            $groups[($i % $this->numGroups) + 1][] = $file->getRelativePathname();
+            if ($this->projectRoot . DIRECTORY_SEPARATOR != substr($file->getPathname(), 0, strlen($this->projectRoot) + 1)) {
+                throw new \Exception("projectRoot({$this->projectRoot}) is not found in test path({$file->getPathname()})");
+            }
+            $groups[($i % $this->numGroups) + 1][] = substr($file->getPathname(), strlen($this->projectRoot) + 1);
             $i++;
         }
 
